@@ -15,9 +15,12 @@
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *gestion_window;
-  GtkWidget *treeview;
-  GtkWidget *reponse;
+  GtkWidget *window_gestion;
+  GtkWidget *window_ecrire;
+  GtkWidget *window_tree;
+  GtkWidget *Supprimer;
+  GtkWidget *Modifier;
+  GtkWidget *Reponses;
 
 #ifdef ENABLE_NLS
   bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
@@ -35,12 +38,18 @@ main (int argc, char *argv[])
    * (except popup menus), just so that you see something after building
    * the project. Delete any components that you don't want shown initially.
    */
-  gestion_window = create_gestion_window ();
-  gtk_widget_show (gestion_window);
-  /*treeview = create_treeview ();
-  gtk_widget_show (treeview);
-  reponse = create_reponse ();
-  gtk_widget_show (reponse);*/
+  window_gestion = create_window_gestion ();
+  gtk_widget_show (window_gestion);
+  /*window_ecrire = create_window_ecrire ();
+  gtk_widget_show (window_ecrire);
+  window_tree = create_window_tree ();
+  gtk_widget_show (window_tree);
+  Supprimer = create_Supprimer ();
+  gtk_widget_show (Supprimer);
+  Modifier = create_Modifier ();
+  gtk_widget_show (Modifier);
+  Reponses = create_Reponses ();
+  gtk_widget_show (Reponses);*/
 
   gtk_main ();
   return 0;
