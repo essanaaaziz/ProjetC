@@ -7,221 +7,206 @@
 #include "callbacks.h"
 #include "interface.h"
 #include "support.h"
-#include "reclamations.h"
 
+#include <stdlib.h>	
+#include <stdio.h>
+
+#include "fonctions.h"
+
+#include <string.h>
+
+//1]espace excusion-agent :
+//1.1) button (ajouter excursion) dans la fenetre excursion
 void
-on_bouton_reply_clicked                (GtkWidget      *objet,
-                                        gpointer         user_data)
-
-{
-GtkWidget *window_gestion;
-GtkWidget *Reponses;
-GtkTreeView *treeview2;
-
-window_gestion=lookup_widget(objet,"window_gestion");
-
-Reponses=lookup_widget(objet,"Reponses");
-Reponses=create_Reponses();
-gtk_widget_destroy(window_gestion);
-
-
-treeview2=lookup_widget(Reponses,"treeview2");
-gtk_widget_show(Reponses);
-
-afficher_reponse(treeview2);
-}
-
-
-
-
-
-
-void
-on_Entrer_clicked                      (GtkWidget      *objet,
+on_ajouter_excursion_clicked           (GtkWidget       *button,
                                         gpointer         user_data)
 {
-char chaine[20],chaine1[20],chaine2[20],chaine3[20],chaine4[20];
-GtkWidget *input,*input1,*input2,*input3,*input4;
-input=lookup_widget(objet,"inputNum");
-input1=lookup_widget(objet,"inputTex");
-input2=lookup_widget(objet,"inputNo");
-input3=lookup_widget(objet,"inputDat");
-input4=lookup_widget(objet,"inputNuum");
-strcpy(chaine,gtk_entry_get_text(GTK_ENTRY(input)));
-strcpy(chaine1,gtk_entry_get_text(GTK_ENTRY(input1)));
-strcpy(chaine2,gtk_entry_get_text(GTK_ENTRY(input2)));
-strcpy(chaine3,gtk_entry_get_text(GTK_ENTRY(input3)));
-strcpy(chaine4,gtk_entry_get_text(GTK_ENTRY(input4)));
-modifier(chaine,chaine1,chaine2,chaine3,chaine4);
+	GtkWidget *fenetre_ajouter;
+	GtkWidget *fenetre_excursion;
+	
+
+	fenetre_excursion=lookup_widget (button, "fenetre_excursion");
+	gtk_widget_destroy(fenetre_excursion);
+	
+
+	fenetre_ajouter=lookup_widget(button,"fenetre_ajouter");
+	fenetre_ajouter=create_fenetre_ajouter();
+	gtk_widget_show(fenetre_ajouter);
+
 }
 
-
-
-
-
-
-
-
-
-
-
-
+//1.2) button (modifier excursion) dans la fenetre excursion
 void
-on_button1_clicked                     (GtkWidget       *objet,
+on_modifier_excursion_clicked          (GtkWidget       *button,
                                         gpointer         user_data)
 {
-GtkWidget *window_gestion , *window_ecrire ;
-window_gestion=lookup_widget(objet,"window_gestion");
-gtk_widget_destroy(window_gestion);
-window_ecrire=create_window_ecrire();
-gtk_widget_show(window_ecrire);
+	GtkWidget *fenetre_modifier;
+	GtkWidget *fenetre_excursion;
+	
+
+	fenetre_excursion=lookup_widget (button, "fenetre_excursion");
+	gtk_widget_destroy(fenetre_excursion);
+	
+
+	fenetre_modifier=lookup_widget(button,"fenetre_modifier");
+	fenetre_modifier=create_fenetre_modifier();
+	gtk_widget_show(fenetre_modifier);
 
 }
 
-
+//1.3) button (supprimer excursion) dans la fenetre excursion
 void
-on_button2_clicked                     (GtkWidget       *objet,
+on_supprimer_excursion_clicked         (GtkWidget       *button,
                                         gpointer         user_data)
 {
-GtkWidget *window_gestion;
-GtkWidget *window_tree;
-GtkWidget *treeview1;
+	FILE *f=fopen("liste_excursion.txt","r");	
+	GtkWidget *fenetre_supprimer;
+	GtkWidget *fenetre_excursion;
+	GtkWidget *comboboxRefSupp;      //Combobox pour le choix de l'excursion à supprimer
 
-window_gestion=lookup_widget(objet,"window_gestion");
-gtk_widget_destroy(window_gestion);
-window_tree=lookup_widget(objet,"window_tree");
-window_tree=create_window_tree();
-gtk_widget_show(window_tree);
-treeview1=lookup_widget(window_tree,"treeview1");
-afficher_reclamation(treeview1);
+	char nom[20];
+	char referance[20];
+	int jour;
+	char mois[20];
+	int annee;
+	char lieu[20];
+	int prix;
+	int heure;
+	
+
+	fenetre_excursion=lookup_widget (button, "fenetre_excursion");
+	gtk_widget_destroy(fenetre_excursion);
+	
+
+	fenetre_supprimer=lookup_widget(button,"fenetre_supprimer");
+	fenetre_supprimer=create_fenetre_supprimer();
+	gtk_widget_show(fenetre_supprimer);
+
+	comboboxRefSupp=lookup_widget (button, "comboboxentrysupp");     //associer l'objet avec la variable
+	
+	
+
+	if(f==NULL)
+	{
+		return;
+	}
+	else
+	{ 		
+		while(fscanf(f,"%s %s %s %d %d %s %d %d \n",nom,referance,lieu,&prix,&jour,mois,&annee,&heure)!=EOF)
+		{
+			gtk_combo_box_append_text(GTK_COMBO_BOX(comboboxRefSupp), (referance) );
+		}
+	}
+	fclose(f);
+
 
 }
 
-
-
-
-
+//1.4) button (consultation excursion) dans la fenetre excursion
 void
-on_button_ajouter_clicked              (GtkWidget       *objet,
+on_consultation_excursion_clicked      (GtkWidget       *button,
                                         gpointer         user_data)
 {
-GtkWidget *input1, *input2, *input3,*input4;
-GtkWidget *window_ecrire;
-reclamation r;
+	GtkWidget *fenetre_consultation_excursion;
+	GtkWidget *fenetre_excursion;
+	GtkListStore *treeview1;
 
-window_ecrire=lookup_widget(objet,"window_ecrire");
+	fenetre_excursion=lookup_widget (button, "fenetre_excursion");
+	
+	
 
-input1=lookup_widget(objet,"entry1");
-input2=lookup_widget(objet,"entry2");
-input3=lookup_widget(objet,"entry3");
-input4=lookup_widget(objet,"entry4");
-
-strcpy(r.texte,gtk_entry_get_text(GTK_ENTRY(input1)));
-strcpy(r.nom,gtk_entry_get_text(GTK_ENTRY(input2)));
-strcpy(r.date,gtk_entry_get_text(GTK_ENTRY(input3)));
-strcpy(r.numero,gtk_entry_get_text(GTK_ENTRY(input4)));
-ajouter_reclamation(r);
-}
-void
-on_valider_clicked                     (GtkWidget       *objet,
-                                        gpointer         user_data)
-{ char chaine [20];
-GtkWidget *input;
-input=lookup_widget(objet,"input_supprimer");
-strcpy(chaine,gtk_entry_get_text(GTK_ENTRY(input)));
-supprimer(chaine);
+	fenetre_consultation_excursion=create_fenetre_consultation_excursion();
+	gtk_widget_show(fenetre_consultation_excursion);
+	gtk_widget_destroy(fenetre_excursion);
+	treeview1=lookup_widget (fenetre_consultation_excursion,"treeview1");
+	afficher_excursion(treeview1);
 }
 
 
 
-
+//1.5) button (recherche) dans la fenetre excursion
 void
-on_button_retour_clicked               (GtkWidget       *objet,
-                                        gpointer         user_data)
-{GtkWidget *window_gestion,*window_ecrire;
-
-window_ecrire=lookup_widget(objet,"window_ecrire");
-gtk_widget_destroy(window_ecrire);
-window_gestion=create_window_gestion();
-gtk_widget_show(window_gestion);
-
-}
-
-
-void
-on_retour_tree_clicked                 (GtkWidget      *objet,
-                                        gpointer         user_data)
-{GtkWidget *window_gestion,*window_tree;
-window_tree=lookup_widget(objet,"window_tree");
-gtk_widget_destroy(window_tree);
-window_gestion=create_window_gestion();
-gtk_widget_show(window_gestion);
-
-}
-
-
-
-
-void
-on_Retouur_clicked                     (GtkWidget      *objet,
+on_recherche_excursion_clicked         (GtkWidget       *button,
                                         gpointer         user_data)
 {
-GtkWidget *window_modifier, *window_gestion;
-window_modifier=lookup_widget(objet,"window_modifier");
-gtk_widget_destroy(window_modifier);
-window_gestion=create_window_gestion();
-gtk_widget_show(window_gestion);
+
+	
+	GtkWidget *fenetre_rechercher;
+	GtkWidget *fenetre_excursion;                         
+	GtkWidget *input;
+	GtkListStore *treeview2;
+	char lieu[20];
+
+	input=lookup_widget(button ,"entrylieu" );
+	
+	strcpy(lieu,gtk_entry_get_text(GTK_ENTRY(input)));
+	
+	recherche (lieu);
+	fenetre_excursion=lookup_widget (button, "fenetre_excursion");
+	fenetre_rechercher=create_fenetre_rechercher();
+	gtk_widget_show(fenetre_rechercher);
+	gtk_widget_destroy(fenetre_excursion);
+	treeview2=lookup_widget (fenetre_rechercher,"treeview2");
+	afficher_lieu_recherche(treeview2);
+		
+	
+
+
 }
 
-
-
-
-
-
-
-
-
-
-
-
+//1.6) button (Reserver excursion) dans la fenetre excursion
 void
-on_reply_retour_clicked                (GtkWidget       *objet,
+on_buttonReserver_clicked              (GtkWidget       *button,
                                         gpointer         user_data)
 {
-GtkWidget *Reponses; 
-GtkWidget *window_gestion;
-Reponses=lookup_widget(objet,"Reponses");
-gtk_widget_destroy(Reponses);
-window_gestion=create_window_gestion();
-gtk_widget_show(window_gestion);
+	GtkWidget *fenetre_reserver_excursion;
+	GtkWidget *fenetre_excursion;
+	GtkListStore *treeview1;
+
+	
+
+	fenetre_excursion=lookup_widget (button, "fenetre_excursion");
+	gtk_widget_destroy(fenetre_excursion);
+	
+
+	fenetre_reserver_excursion=lookup_widget(button,"fenetre_reserver_excursion");
+	fenetre_reserver_excursion=create_fenetre_reserver_excursion();
+
+	gtk_widget_show(fenetre_reserver_excursion);
+	treeview1=lookup_widget (fenetre_reserver_excursion,"treeview1");
+	afficher_excursion(treeview1);
 }
 
 
-
-
+//1.7) button (mon compte) dans la fenetre excursion
 void
-on_supprimer_clicked                   (GtkWidget       *objet,
+on_buttoncompte_clicked                (GtkWidget       *button,
                                         gpointer         user_data)
 {
-GtkWidget *Supprimer; 
-GtkWidget *window_tree;
-window_tree=lookup_widget(objet,"window_tree");
-gtk_widget_destroy(window_tree);
-Supprimer=create_Supprimer();
-gtk_widget_show(Supprimer);
+	
+	
 }
 
 
+//1.8)button Mes Réservations dans la fenetre excursion
+
 void
-on_Retouuuur_clicked                   (GtkWidget       *objet,
+on_button_mes_Reservations_clicked     (GtkWidget       *button,
                                         gpointer         user_data)
 {
-GtkWidget *Supprimer; 
-GtkWidget *window_gestion;
-Supprimer=lookup_widget(objet,"Supprimer");
-gtk_widget_destroy(Supprimer);
-window_gestion=create_window_gestion();
-gtk_widget_show(window_gestion);
+	GtkWidget *fenetre_Reservation;
+	GtkWidget *fenetre_excursion;
+	
+
+	fenetre_excursion=lookup_widget (button, "fenetre_excursion");
+	gtk_widget_destroy(fenetre_excursion);
+	
+
+	fenetre_Reservation=lookup_widget(button,"fenetre_Reservation");
+	fenetre_Reservation=create_fenetre_Reservation();
+
+	gtk_widget_show(fenetre_Reservation);
+
 }
 
 
@@ -234,37 +219,358 @@ gtk_widget_show(window_gestion);
 
 
 
+
+//2] fenetre_ajouter :
+//2.1) button (Retour) dans la fenetre ajouter
 void
-on_modifier_clicked                    (GtkWidget  *objet,
+on_buttonRetourA_clicked               (GtkWidget       *button,
                                         gpointer         user_data)
 {
-GtkWidget *Modifier; 
-GtkWidget *window_tree;
-window_tree=lookup_widget(objet,"window_tree");
-gtk_widget_destroy(window_tree);
-Modifier=create_Modifier();
-gtk_widget_show(Modifier);
+	GtkWidget *fenetre_ajouter;
+	GtkWidget *fenetre_excursion;
+	
+
+	fenetre_ajouter=lookup_widget (button, "fenetre_ajouter");
+	gtk_widget_destroy(fenetre_ajouter);
+	
+
+	fenetre_excursion=lookup_widget(button,"fenetre_excursion");
+	fenetre_excursion=create_fenetre_excursion();
+	gtk_widget_show(fenetre_excursion);
 }
+
+
+
+		
+
+
+//2.2) button (Valider_Ajout) dans la fenetre ajouter
+void
+on_buttonValider_Ajout_clicked         (GtkWidget       *button,
+                                        gpointer         user_data)
+{
+	FILE *f=fopen("liste_excursion.txt","a+");
+	GtkWidget *jour;
+	GtkWidget *mois;
+	GtkWidget *annee;
+	GtkWidget *nom_excursion;
+	GtkWidget *prix;
+	GtkWidget *lieu;
+	GtkWidget *heure;
+	GtkWidget *reference;
+	GtkWidget *output;
+	
+	excursion exc;
+
+	char tmp[20];
+
+	//associer les objets avec des variables :
+	jour=lookup_widget(button, "spinbuttonJour");
+	mois=lookup_widget(button, "comboboxentryMois");
+	annee=lookup_widget(button, "spinbuttonAnnee");
+	heure=lookup_widget(button, "comboboxHeure_excursion");
+
+	nom_excursion=lookup_widget(button, "entryNom_exc");
+	reference=lookup_widget(button, "entryReference_exc");
+	prix=lookup_widget(button, "spinbuttonPrix");
+	lieu=lookup_widget(button, "entrylieu_exc");
+	output=lookup_widget(button,"labelEnregistrer");
+
+
+
+	//récupérer les valeurs des spins buttons :
+	exc.jour=gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (jour));	
+	exc.prix=gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (prix));
+	exc.annee=gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (annee));
+	
+
+	//récupérer les valeurs des combobox :
+	if(strcmp("09h==>12h15",gtk_combo_box_get_active_text(GTK_COMBO_BOX(heure)))==0)
+		exc.heure=1;
+	else
+		exc.heure=2;
+
+	
+	strcpy(exc.mois,gtk_combo_box_get_active_text(GTK_COMBO_BOX(mois)));
+	
+
+	//récupérer les textes des zones de textes
+	strcpy(exc.nom,gtk_entry_get_text(GTK_ENTRY(nom_excursion)));
+	strcpy(exc.lieu,gtk_entry_get_text(GTK_ENTRY(lieu)));
+	strcpy(exc.referance,gtk_entry_get_text(GTK_ENTRY(reference)));
+	
+	
+	//enregistrer dans le fichier liste_excurtions.txt
+	ajouter_excursion(exc);
+
+	//Changer le message de validation
+	gtk_label_set_text(GTK_LABEL(output),"Enregistrement Réussit .");
+	
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+//3] fenetre_modifier :
+//3.1) button (Retour) dans la fenetre modifier
+void
+on_buttonRetour_Mod_clicked            (GtkWidget       *button,
+                                        gpointer         user_data)
+{
+	GtkWidget *fenetre_modifier;
+	GtkWidget *fenetre_excursion;
+	
+
+	fenetre_modifier=lookup_widget (button, "fenetre_modifier");
+	gtk_widget_destroy(fenetre_modifier);
+	
+
+	fenetre_excursion=lookup_widget(button,"fenetre_excursion");
+	fenetre_excursion=create_fenetre_excursion();
+	gtk_widget_show(fenetre_excursion);
+
+}
+
+// 3.2) button (confirmer) dans la fenetre modifier 
+void
+on_buttonConfirmer_Modif_clicked       (GtkButton       *button,
+                                        gpointer         user_data)
+{
+	GtkWidget *reference;
+	GtkWidget *jour;
+	GtkWidget *mois;
+	GtkWidget *annee;
+	GtkWidget *nom_excursion;
+	GtkWidget *prix;
+	GtkWidget *heure;
+	GtkWidget *lieu;
+	GtkWidget *output;
+	int v;
+	
+	excursion exc;
+
+	char tmp[20];
+
+	//associer les objets avec des variables :
+	reference=lookup_widget(button, "entryreference");
+	jour=lookup_widget(button, "spinbutton_nouv_jour");
+	mois=lookup_widget(button, "combobox_nou_mois");
+	annee=lookup_widget(button, "spinbutton_nou_annee");
+	heure=lookup_widget(button, "combobox_nouv_heure");
+
+	nom_excursion=lookup_widget(button, "entry_nou_nom");
+	prix=lookup_widget(button, "spinbutton_nou_prix");
+	lieu=lookup_widget(button, "entrylieu_exc");
+	output=lookup_widget(button,"labelConfirmation_Mod");
+
+
+
+	//récupérer les valeurs des spins buttons :
+	exc.jour=gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (jour));	
+	exc.prix=gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (prix));
+	exc.annee=gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (annee));
+	
+
+	//récupérer les valeurs des combobox :
+	if(strcmp("09h==>12h15",gtk_combo_box_get_active_text(GTK_COMBO_BOX(heure)))==0)
+		exc.heure=1;
+	else
+		exc.heure=2;
+
+	
+	strcpy(exc.mois,gtk_combo_box_get_active_text(GTK_COMBO_BOX(mois)));
+	
+
+	//récupérer les textes des zones de textes
+	strcpy(exc.nom,gtk_entry_get_text(GTK_ENTRY(nom_excursion)));
+	strcpy(exc.referance,gtk_entry_get_text(GTK_ENTRY(reference)));
+	
+	//enregistrer dans le fichier liste_excurtions.txt
+	v=modifier_excursion(exc);
+
+	//Changer le message de validation
+	switch (v)
+	{ 
+		case 1: gtk_label_set_text(GTK_LABEL(output),"Modification Réussite .");
+			break;
+		default : gtk_label_set_text(GTK_LABEL(output),"Modification réussite .");
+			break;
+	}
+	
+
+}
+
+
+
+
+
+
+
+//4] fenetre_supprimer :
+//4.1) button (Retour) dans la fenetre supprimer
+void
+on_buttonRetour_Sup_clicked            (GtkWidget       *button,
+                                        gpointer         user_data)
+{
+	GtkWidget *fenetre_supprimer;
+	GtkWidget *fenetre_excursion;
+	
+
+	fenetre_supprimer=lookup_widget (button, "fenetre_supprimer");
+	gtk_widget_destroy(fenetre_supprimer);
+	
+
+	fenetre_excursion=lookup_widget(button,"fenetre_excursion");
+	fenetre_excursion=create_fenetre_excursion();
+	gtk_widget_show(fenetre_excursion);
+
+
+}
+
+
+//4.2) button(Supprimer) dans la fenêtre supprimer
+void
+on_buttonSupprimer_clicked             (GtkButton       *button,
+                                        gpointer         user_data)
+{
+	GtkWidget *input;
+	GtkWidget *output;
+	char referance1[20];
+	char Validation[50];
+	int v1;	
+	
+	input=lookup_widget(button, "entryRefSupp");
+	output=lookup_widget(button, "labelText_Sup");
+	
+	strcpy(referance1, gtk_entry_get_text(GTK_ENTRY(input)));
+	
+	v1=supprimer_excursion(referance1);
+	validsuppression(v1,Validation);
+
+	gtk_label_set_text(GTK_LABEL(output),Validation);
+	
+	
+	
+	
+
+	
+
+
+}
+
+
+
+
+
+
+
+//5] fenetre_Consultation_Excursion :
+//5.1) button (Retour) dans la fenetre_Consultation_Excursion
+void
+on_buttonRetourCons_excu_clicked       (GtkWidget       *button,
+                                        gpointer         user_data)
+{
+	GtkWidget *fenetre_consultation_excursion;
+	GtkWidget *fenetre_excursion;
+	
+
+	fenetre_consultation_excursion=lookup_widget (button, "fenetre_consultation_excursion");
+	gtk_widget_destroy(fenetre_consultation_excursion);
+	
+
+	fenetre_excursion=lookup_widget(button,"fenetre_excursion");
+	fenetre_excursion=create_fenetre_excursion();
+	gtk_widget_show(fenetre_excursion);
+
+}
+
+
+
+
+
+
+
+
+//6] fenetre_reserver_excursion :
+//6.1) button (Retour) dans la fenetre_reserver_excursion
+void
+on_buttonAnnuler_Reservation_clicked   (GtkWidget       *button,
+                                        gpointer         user_data)
+{
+	GtkWidget *fenetre_reserver_excursion;
+	GtkWidget *fenetre_excursion;
+	
+
+	fenetre_reserver_excursion=lookup_widget (button, "fenetre_reserver_excursion");
+	gtk_widget_destroy(fenetre_reserver_excursion);
+	
+
+	fenetre_excursion=lookup_widget(button,"fenetre_excursion");
+	fenetre_excursion=create_fenetre_excursion();
+	gtk_widget_show(fenetre_excursion);
+
+}
+
+
+
+
+
+//7] fenetre_rechercher
+//7.1)  buttonRetourRech dans la fenetre_rechercher
+void
+on_buttonRetourRech_clicked            (GtkWidget       *button,
+                                        gpointer         user_data)
+{
+	GtkWidget *fenetre_rechercher;
+	GtkWidget *fenetre_excursion;
+	
+
+	fenetre_rechercher=lookup_widget (button, "fenetre_rechercher");
+	gtk_widget_destroy(fenetre_rechercher);
+	
+
+	fenetre_excursion=lookup_widget(button,"fenetre_excursion");
+	fenetre_excursion=create_fenetre_excursion();
+	gtk_widget_show(fenetre_excursion);
+
+}
+
+
+
+
+
+
+
+//8] fenetre (mes reservations)
+//8.1) buttonRetourMR dans la fenetre mes reservations
 
 
 void
-on_retour_modifier_clicked             (GtkWidget       *objet,
+on_buttonRetourMR_clicked              (GtkWidget       *button,
                                         gpointer         user_data)
-{ 
-GtkWidget *Modifier; 
-GtkWidget *window_gestion;
-Modifier=lookup_widget(objet,"Modifier");
-gtk_widget_destroy(Modifier);
-window_gestion=create_window_gestion();
-gtk_widget_show(window_gestion);
+{
+	GtkWidget *fenetre_Reservation;
+	GtkWidget *fenetre_excursion;
+	
+
+	fenetre_Reservation=lookup_widget (button, "fenetre_Reservation");
+	gtk_widget_destroy(fenetre_Reservation);
+	
+
+	fenetre_excursion=lookup_widget(button,"fenetre_excursion");
+	fenetre_excursion=create_fenetre_excursion();
+	gtk_widget_show(fenetre_excursion);
+
 }
-
-
-
-
-
-
-
 
 
 

@@ -2,79 +2,89 @@
 
 
 void
-on_button1_clicked                     (GtkWidget       *objet,
+on_ajouter_excursion_clicked           (GtkWidget       *button,
                                         gpointer         user_data);
 
 void
-on_button2_clicked                     (GtkWidget       *objet,
+on_modifier_excursion_clicked          (GtkWidget       *button,
                                         gpointer         user_data);
 
 void
-on_button_ajouter_clicked              (GtkWidget       *objet,
+on_supprimer_excursion_clicked         (GtkWidget       *button,
                                         gpointer         user_data);
 
 void
-on_button_retour_clicked               (GtkWidget      *objet,
+on_consultation_excursion_clicked      (GtkWidget       *button,
                                         gpointer         user_data);
 
 void
-on_retour_tree_clicked                 (GtkWidget       *objet,
+on_recherche_excursion_clicked         (GtkWidget       *button,
                                         gpointer         user_data);
 
 void
-on_Modifier_clicked                    (GtkWidget       *objet,
+on_buttonReserver_clicked              (GtkWidget       *button,
                                         gpointer         user_data);
 
 void
-on_Valider_clicked                     (GtkWidget      *objet,
+on_buttonRetourA_clicked               (GtkWidget       *button,
                                         gpointer         user_data);
 
 void
-on_Retouur_clicked                     (GtkWidget       *objet,
+on_buttonRetourA_clicked               (GtkWidget       *button,
                                         gpointer         user_data);
 
 void
-on_button_supprimer_clicked            (GtkButton       *button,
-                                        gpointer         user_data);
-
-
-
-void
-on_valider_clicked                     (GtkWidget       *objet,
+on_buttonRetour_Mod_clicked            (GtkWidget       *button,
                                         gpointer         user_data);
 
 void
-on_valider_clicked                     (GtkWidget      *objet,
+on_buttonRetour_Sup_clicked            (GtkWidget       *button,
                                         gpointer         user_data);
 
 void
-on_supprimer_clicked                   (GtkWidget       *objet,
+on_buttonRetourCons_excu_clicked       (GtkWidget       *button,
                                         gpointer         user_data);
 
 void
-on_Retouuuur_clicked                   (GtkWidget      *objet,
-                                        gpointer         user_data);
-
-
-
-void
-on_Entrer_clicked                      (GtkWidget       *objet,
-                                        gpointer         user_data);
-
-
-
-void
-on_modifier_clicked                    (GtkWidget       *objet,
+on_buttonAnnuler_Reservation_clicked   (GtkWidget       *button,
                                         gpointer         user_data);
 
 void
-on_retour_modifier_clicked             (GtkWidget       *objet,
+on_buttonRetourRech_clicked            (GtkWidget       *button,
                                         gpointer         user_data);
 
 void
-on_reply_retour_clicked                (GtkWidget       *objet,
+on_buttoncompte_clicked                (GtkWidget       *button,
                                         gpointer         user_data);
 
 void
-on_bouton_reply_clicked                (GtkWidget       *objet,
+on_buttonReservations_clicked          (GtkWidget       *button,
+                                        gpointer         user_data);
+
+void
+on_button_mes_Reservations_clicked     (GtkWidget       *button,
+                                        gpointer         user_data);
+
+void
+on_buttonRetourMR_clicked              (GtkWidget       *button,
+                                        gpointer         user_data);
+
+void
+on_buttonValider_Ajout_clicked         (GtkWidget       *button,
+                                        gpointer         user_data);
+
+void
+on_buttonConfirmer_Mois_clicked        (GtkWidget       *button,
+                                        gpointer         user_data);
+
+void
+on_buttonSupprimer_clicked             (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+on_buttonConfirmer_Modif_clicked       (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+on_Consulter_excursions_client_clicked (GtkButton       *button,
                                         gpointer         user_data);
